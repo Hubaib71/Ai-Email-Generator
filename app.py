@@ -5,7 +5,6 @@ from groq import Groq
 # 1. Fetch API Key safely from Environment Variables or Streamlit Secrets
 groq_api_key = os.environ.get('GROQ_API_KEY')
 
-# If running on Streamlit Cloud, check streamlit secrets safely
 if not groq_api_key:
     try:
         import streamlit as st
@@ -14,7 +13,7 @@ if not groq_api_key:
         pass
 
 if not groq_api_key:
-    raise ValueError("GROQ_API_KEY not found. Please set it in your environment variables or Streamlit secrets.")
+    raise ValueError("GROQ_API_KEY not found. Please set it in Streamlit Secrets.")
 
 client = Groq(api_key=groq_api_key)
 
@@ -69,7 +68,7 @@ with gr.Blocks(title="AI Email Generator") as demo:
             btn = gr.Button("Generate Email 🚀", variant="primary")
             
         with gr.Column():
-            output = gr.Textbox(label="Generated Email", lines=12, show_copy_button=True)
+            output = gr.Textbox(label="Generated Email", lines=12)
 
     btn.click(
         fn=generate_email,
@@ -77,5 +76,4 @@ with gr.Blocks(title="AI Email Generator") as demo:
         outputs=output
     )
 
-if __name__ == "__main__":
-    demo.launch()
+demo.launch()
