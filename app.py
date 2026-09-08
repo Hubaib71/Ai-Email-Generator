@@ -2,7 +2,7 @@ import os
 import gradio as gr
 from groq import Groq
 
-# 1. Fetch API Key safely from Environment Variables or Streamlit Secrets
+# 1. Safely retrieve API Key from Environment Variables or Streamlit Secrets
 groq_api_key = os.environ.get('GROQ_API_KEY')
 
 if not groq_api_key:
@@ -13,11 +13,11 @@ if not groq_api_key:
         pass
 
 if not groq_api_key:
-    raise ValueError("GROQ_API_KEY not found. Please set it in Streamlit Secrets.")
+    raise ValueError("GROQ_API_KEY not found. Please add your key to Streamlit Secrets or Environment Variables.")
 
 client = Groq(api_key=groq_api_key)
 
-# 2. Email generation function
+# 2. Email generation logic
 def generate_email(recipient_name, purpose, key_points, tone, sender_name):
     if not recipient_name or not purpose or not key_points:
         return "Please fill in all required fields (Recipient, Purpose, Key Points)."
@@ -49,10 +49,10 @@ def generate_email(recipient_name, purpose, key_points, tone, sender_name):
     except Exception as e:
         return f"Error generating email: {str(e)}"
 
-# 3. Gradio Interface
+# 3. Gradio Interface Definition
 with gr.Blocks(title="AI Email Generator") as demo:
     gr.Markdown("# 📧 AI Email Generator")
-    gr.Markdown("Generate tailored emails using Groq LLM.")
+    gr.Markdown("Generate tailored business and personal emails powered by Groq LLM.")
     
     with gr.Row():
         with gr.Column():
@@ -76,4 +76,5 @@ with gr.Blocks(title="AI Email Generator") as demo:
         outputs=output
     )
 
-demo.launch()
+if __name__ == "__main__":
+    demo.launch()
