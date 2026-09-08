@@ -1,16 +1,20 @@
 import os
 import gradio as gr
-from google.colab import userdata
 from groq import Groq
 
-# 1. Initialize Groq client using Colab Secrets or standard Environment Variable
-try:
-    groq_api_key = userdata.get('GROQ_API_KEY')
-except Exception:
-    groq_api_key = os.environ.get('GROQ_API_KEY')
+# 1. Fetch API Key safely from Environment Variables or Streamlit Secrets
+groq_api_key = os.environ.get('GROQ_API_KEY')
+
+# If running on Streamlit Cloud, check streamlit secrets safely
+if not groq_api_key:
+    try:
+        import streamlit as st
+        groq_api_key = st.secrets.get("GROQ_API_KEY")
+    except Exception:
+        pass
 
 if not groq_api_key:
-    raise ValueError("GROQ_API_KEY not found. Add it to Colab Secrets or Environment Variables.")
+    raise ValueError("GROQ_API_KEY not found. Please set it in your environment variables or Streamlit secrets.")
 
 client = Groq(api_key=groq_api_key)
 
@@ -74,4 +78,4 @@ with gr.Blocks(title="AI Email Generator") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo.launch()
